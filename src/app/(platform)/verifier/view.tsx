@@ -74,7 +74,7 @@ function Verifier() {
                     </div>
                   )
                 })()}
-                <dl className="grid gap-4 p-5 text-sm sm:grid-cols-2">
+                <dl className="grid grid-cols-1 gap-4 p-5 text-sm sm:grid-cols-2">
                   <div><dt className="text-xs text-muted-foreground">Dossier</dt><dd className="font-mono font-semibold">{found.id}</dd></div>
                   <div><dt className="text-xs text-muted-foreground">Nature</dt><dd className="font-semibold">{PROCEDURES[found.type].label} — {outcomeOf(found)?.label}</dd></div>
                   <div><dt className="text-xs text-muted-foreground">Objet</dt><dd className="font-semibold">{subjectTitle(found)}</dd></div>

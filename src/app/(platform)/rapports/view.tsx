@@ -39,8 +39,8 @@ export default function RapportsPage() {
         description="Choisissez un rapport et son périmètre, puis générez-le au format A4. Il ne porte que sur les dossiers visibles par votre profil."
       />
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {(Object.keys(RAPPORTS) as RapportType[]).map((t, i) => {
             const r = RAPPORTS[t]
             const Icon = ICONS[t]

@@ -105,7 +105,7 @@ export default function FieldInspectionPage() {
         </div>
       )}
 
-      <div className="grid gap-6 xl:grid-cols-[1fr_380px]">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_380px]">
         <div className="space-y-6">
           {sections.map((s) => (
             <section key={s} className="card-elevated p-5">

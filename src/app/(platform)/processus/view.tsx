@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { useMemo, useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
 import { ArrowRight, CornerDownLeft, CornerUpRight, FolderOpen, Gavel, Inbox, Layers, Timer, TriangleAlert } from "lucide-react"
@@ -12,6 +13,7 @@ import { DELAIS, PROCEDURE_DEFS, stageLabel, subjectTitle, type ProcedureDef } f
 import { canSee } from "@/lib/workflow"
 import { computeSla } from "@/lib/dates"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { DossierId, Empty, PageHeader, SlaRing } from "@/components/platform/bits"
 
 /** Toutes les colonnes possibles de la vue d’ensemble, dans l’ordre du circuit. */
@@ -58,7 +60,8 @@ export default function ProcessusPage() {
   const all = useRims((s) => s.dossiers)
   const visible = useMemo(() => all.filter((d) => canSee(user, d)), [all, user])
   const count = useMemo(() => countBy(visible), [visible])
-  const [tab, setTab] = useState<string>("ensemble")
+  const initial = useSearchParams().get("procedure")
+  const [tab, setTab] = useState<string>(PROCEDURE_DEFS.some((p) => p.id === initial) ? initial! : "ensemble")
 
   const enCours = visible.filter((d) => !CLOSED.includes(d.status) && d.status !== "brouillon").length
   const complements = visible.filter((d) => d.status === "complements").length
@@ -81,7 +84,24 @@ export default function ProcessusPage() {
       </div>
 
       <Tabs value={tab} onValueChange={setTab}>
-        <TabsList className="mb-4 h-auto flex-wrap justify-start gap-1 rounded-xl p-1">
+        {/* Mobile : une liste déroulante remplace les 11 onglets. */}
+        <div className="mb-4 sm:hidden">
+          <Select value={tab} onValueChange={setTab}>
+            <SelectTrigger className="h-11 w-full rounded-xl bg-card" aria-label="Procédure affichée">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ensemble">Vue d’ensemble — toutes les procédures</SelectItem>
+              {PROCEDURE_DEFS.map((p) => (
+                <SelectItem key={p.id} value={p.id}>
+                  <span className="size-2 shrink-0 rounded-full" style={{ background: moduleById(p.module).color }} />
+                  {p.label} ({visible.filter((d) => d.type === p.id).length})
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <TabsList className="mb-4 hidden flex-wrap justify-start gap-1 rounded-xl p-1 sm:flex group-data-horizontal/tabs:h-auto [&>button]:h-8 [&>button]:flex-none">
           <TabsTrigger value="ensemble" className="gap-1.5">
             <Layers className="size-3.5" /> Vue d’ensemble
           </TabsTrigger>
@@ -119,7 +139,7 @@ function Kpi({ icon: Icon, label, value, accent }: { icon: React.ElementType; la
       </span>
       <div className="min-w-0">
         <div className="font-heading text-2xl leading-none font-bold">{value}</div>
-        <div className="mt-1 truncate text-xs text-muted-foreground">{label}</div>
+        <div className="mt-1 text-xs leading-tight text-muted-foreground">{label}</div>
       </div>
     </div>
   )
@@ -134,7 +154,10 @@ function Overview({ count, onOpen }: { count: (t: ProcedureType, s: Status) => n
       <div className="flex flex-wrap items-center justify-between gap-2 border-b px-5 py-4">
         <div>
           <h2 className="font-heading font-semibold">Toutes les procédures, tous les états</h2>
-          <p className="text-xs text-muted-foreground">Cliquez sur une ligne pour ouvrir le schéma de la procédure. « · » = état absent du circuit.</p>
+          <p className="text-xs text-muted-foreground">
+            Cliquez sur une ligne pour ouvrir le schéma de la procédure. « · » = état absent du circuit.
+            <span className="sm:hidden"> Faites glisser le tableau vers la gauche pour voir tous les états.</span>
+          </p>
         </div>
         <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
           0
@@ -146,7 +169,7 @@ function Overview({ count, onOpen }: { count: (t: ProcedureType, s: Status) => n
         <table className="w-full min-w-275 border-collapse text-sm">
           <thead>
             <tr className="text-[10.5px] tracking-wide text-muted-foreground uppercase">
-              <th className="sticky left-0 z-10 bg-card px-4 py-3 text-left font-semibold">Procédure</th>
+              <th className="sticky left-0 z-10 bg-card px-3 py-3 text-left font-semibold shadow-[1px_0_0_var(--border)] sm:px-4 sm:shadow-none">Procédure</th>
               {ALL_STATES.map((s) => (
                 <th key={s} className="px-1 py-3 text-center font-semibold">
                   <span className="inline-flex items-center gap-1">
@@ -165,11 +188,11 @@ function Overview({ count, onOpen }: { count: (t: ProcedureType, s: Status) => n
                 const total = states.reduce((a, s) => a + count(p.id, s), 0)
                 return (
                   <tr key={p.id} onClick={() => onOpen(p.id)} className={cn("group cursor-pointer hover:bg-muted/50", i === 0 && "border-t")}>
-                    <td className="sticky left-0 z-10 bg-card px-4 py-2.5 group-hover:bg-muted">
+                    <td className="sticky left-0 z-10 w-36 max-w-36 bg-card px-3 py-2.5 shadow-[1px_0_0_var(--border)] group-hover:bg-muted sm:w-auto sm:max-w-none sm:px-4 sm:shadow-none">
                       <div className="flex items-center gap-2">
                         <span className="h-6 w-1 shrink-0 rounded-full" style={{ background: m.color }} />
                         <div className="min-w-0">
-                          <div className="truncate font-medium">{p.label}</div>
+                          <div className="text-[13px] leading-tight font-medium sm:truncate sm:text-sm">{p.label}</div>
                           <div className="text-[10.5px] text-muted-foreground">{m.short}</div>
                         </div>
                       </div>
@@ -254,7 +277,25 @@ function ProcessView({ def, dossiers }: { def: ProcedureDef; dossiers: Dossier[]
           <Legend />
         </div>
 
-        <div className="-mx-5 overflow-x-auto px-5 pb-2">
+        {/* Mobile : le circuit se lit de haut en bas. */}
+        <ol className="md:hidden">
+          {main.map((s, i) => (
+            <li key={s}>
+              {i > 0 && <div className={cn("ml-5 h-4 w-0.5", s === "depose" ? "border-l-2 border-dashed border-border" : "bg-border")} />}
+              <StateRow def={def} status={s} step={s === "brouillon" ? null : i} count={n(s)} peak={peak} active={selected === s} onClick={() => setSelected(selected === s ? null : s)} />
+              {s === "recevabilite" && hasComplements && (
+                <div className="mt-1.5 ml-5 border-l-2 border-dashed border-amber-500/60 pt-1.5 pl-4">
+                  <div className="mb-1.5 flex items-center gap-1.5 text-[10.5px] font-medium text-amber-600 dark:text-amber-400">
+                    <CornerDownLeft className="size-3.5 -scale-x-100" /> incomplet → compléments → retour en recevabilité
+                  </div>
+                  <StateRow def={def} status="complements" step={null} count={n("complements")} peak={peak} active={selected === "complements"} onClick={() => setSelected(selected === "complements" ? null : "complements")} branch />
+                </div>
+              )}
+            </li>
+          ))}
+        </ol>
+
+        <div className="-mx-5 hidden overflow-x-auto px-5 pb-2 md:block">
           <div className="flex w-max items-start">
             {main.map((s, i) => (
               <div key={s} className="flex items-start">
@@ -319,7 +360,7 @@ function ProcessView({ def, dossiers }: { def: ProcedureDef; dossiers: Dossier[]
               </span>
             )
           })}
-          {def.parent && <span className="ml-auto text-xs text-muted-foreground">Prérequis : {def.parent.label}{def.parent.delaiJours ? ` (≤ ${def.parent.delaiJours} j)` : ""}</span>}
+          {def.parent && <span className="w-full text-xs text-muted-foreground sm:ml-auto sm:w-auto">Prérequis : {def.parent.label}{def.parent.delaiJours ? ` (≤ ${def.parent.delaiJours} j)` : ""}</span>}
         </div>
       </section>
 
@@ -459,5 +500,56 @@ function StateNode({
         />
       </div>
     </motion.button>
+  )
+}
+
+/** Version mobile d’un état : une ligne compacte, lue de haut en bas. */
+function StateRow({
+  def,
+  status,
+  step,
+  count,
+  peak,
+  active,
+  onClick,
+  branch,
+}: {
+  def: ProcedureDef
+  status: Status
+  step: number | null
+  count: number
+  peak: number
+  active: boolean
+  onClick: () => void
+  branch?: boolean
+}) {
+  const meta = STATUS_META[status]
+  const lab = stageLabel(def.id, status)
+  const hot = !CLOSED.includes(status) && count > 0 && count === peak
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "flex w-full items-center gap-3 rounded-2xl border bg-card p-2.5 pr-3 text-left transition-colors active:bg-muted",
+        branch && "border-2 border-dashed border-amber-500/70 bg-amber-500/5",
+        status === "brouillon" && "border-dashed bg-muted/30",
+        hot && "border-brand-green ring-2 ring-brand-green/25",
+        active && "ring-2 ring-foreground/40"
+      )}
+    >
+      <span className={cn("grid size-10 shrink-0 place-items-center rounded-xl text-xs font-bold", meta.tone)}>{step ?? (branch ? "↺" : "•")}</span>
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-sm font-semibold">{lab.label}</span>
+        <span className="block truncate text-[11px] text-muted-foreground">{stageRoles(def, status).map((r) => ROLES[r].short).join(" · ")}</span>
+        <span className="mt-1.5 block h-1 overflow-hidden rounded-full bg-muted">
+          <span className={cn("block h-full rounded-full", hot ? "bg-brand-green" : meta.dot)} style={{ width: `${Math.min(100, (count / peak) * 100)}%` }} />
+        </span>
+      </span>
+      <span className="text-right">
+        <span className={cn("block font-heading text-2xl leading-none font-bold tabular-nums", count === 0 && "text-muted-foreground/40")}>{count}</span>
+        <span className="text-[10px] text-muted-foreground">dossier{count > 1 ? "s" : ""}</span>
+      </span>
+    </button>
   )
 }

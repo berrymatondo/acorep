@@ -71,7 +71,7 @@ export default function InspectionsPage() {
   return (
     <>
       <PageHeader eyebrow="Évaluation & inspections" title="Missions d’inspection" description="Planification des visites, grille annexe 04, preuves géolocalisées et procès-verbaux signés." />
-      <div className="grid gap-6 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <Col title="À planifier" items={toPlan} hint="Paiement validé" userId={user.id} />
         <Col title="Programmées" items={planned} hint="Ordre de mission émis" userId={user.id} />
         <Col title="PV signés récents" items={done} hint="Derniers 6" userId={user.id} />

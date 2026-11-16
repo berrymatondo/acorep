@@ -36,10 +36,10 @@ export function OverviewTab({ d }: { d: Dossier }) {
   const sla = computeSla(d)
   const mod = moduleById(def.module)
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       {def.fields && d.details && (
         <Block title={def.categoryGroup === "produit" ? "Produit et objet de la demande" : "Informations spécifiques"} className="md:col-span-2">
-          <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {def.fields.map((f) => (
               <div key={f.id} className={cn(f.type === "textarea" && "sm:col-span-2 lg:col-span-3")}>
                 <Field label={f.label}>{d.details?.[f.id]}</Field>
@@ -225,7 +225,7 @@ export function EvaluationTab({ d }: { d: Dossier }) {
         </div>
         {d.evaluation?.clotureLe ? <span className="text-xs font-semibold text-brand-green">Clôturée le {fmtDate(d.evaluation.clotureLe)}</span> : <span className="text-xs text-muted-foreground">En cours</span>}
       </div>
-      <div className="grid gap-3 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
         {ev.axes.map((a) => {
           const r = d.evaluation?.axes[a.id]
           return (
@@ -266,7 +266,7 @@ export function InspectionTab({ d }: { d: Dossier }) {
   if (!d.mission) return <Empty icon={Camera} title="Aucune mission planifiée" text="L’ordre de mission est émis par le bureau instructeur." />
   const i = d.inspection
   return (
-    <div className="grid gap-4 md:grid-cols-3">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
       <Block title="Mission" className="md:col-span-1">
         <dl className="space-y-3">
           <Field label="Ordre de mission" mono>{d.mission.ordre}</Field>
@@ -312,7 +312,7 @@ export function DecisionTab({ d }: { d: Dossier }) {
   const out = outcomeOf(d)
   if (!d.cpop && !d.decision) return <Empty icon={ShieldCheck} title="Aucune décision à ce stade" text="Les avis et le projet de décision motivée apparaîtront ici." />
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       {d.cpop && (
         <Block title={def.commission?.label ?? "Avis collégial"}>
           <div className={cn("mb-2 inline-flex rounded-full px-3 py-1 text-xs font-bold uppercase", d.cpop.avis === "favorable" ? "bg-accent text-accent-foreground" : "bg-rose-500/12 text-rose-600")}>{d.cpop.avis}</div>

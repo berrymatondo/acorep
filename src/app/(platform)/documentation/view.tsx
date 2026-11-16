@@ -112,7 +112,7 @@ function PageDoc({ p, role }: { p: DocPage; role: Role }) {
           </Button>
         )}
       </header>
-      <div className="grid gap-px bg-border lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-px bg-border lg:grid-cols-2">
         {p.fonctionnalites.map((f, i) => (
           <div key={f.titre} className={cn("bg-card p-5", p.fonctionnalites.length % 2 === 1 && i === p.fonctionnalites.length - 1 && "lg:col-span-2")}>
             <h4 className="mb-2.5 text-sm font-semibold">{f.titre}</h4>
@@ -244,7 +244,7 @@ export default function DocumentationPage() {
           {!query && (
             <>
               <Section id="prise-en-main" icon={BookOpen} eyebrow="Fondamentaux" title="Prise en main">
-                <div className="grid gap-4 md:grid-cols-3">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                   {[
                     { t: "1. Choisir un profil", d: "Depuis l’accueil ou le menu profil (en haut à droite). Chaque profil a son rôle, sa province et donc ses écrans et ses actions." },
                     { t: "2. Suivre sa file", d: "Les agents commencent par la File de travail ; le demandeur par son tableau de bord et « Nouvelle demande »." },
@@ -283,7 +283,7 @@ export default function DocumentationPage() {
                   d’étape de paiement, le PV de constat pas d’avis collégial). Deux statuts hors circuit : <StatusBadge status="brouillon" /> avant
                   soumission et <StatusBadge status="complements" /> lorsque le délai est suspendu dans l’attente du demandeur.
                 </p>
-                <ol className="grid gap-2 sm:grid-cols-2 xl:grid-cols-5">
+                <ol className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-5">
                   {STAGES.map((s, i) => (
                     <li key={s.id} className="card-elevated relative p-4">
                       <div className="flex items-center gap-2">
@@ -302,7 +302,7 @@ export default function DocumentationPage() {
                   Les agents sont rattachés à une province et ne voient que ses dossiers ; le DG et les rôles nationaux voient tout le pays. Votre
                   profil actuel est mis en évidence.
                 </p>
-                <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3">
                   {(Object.entries(ROLES) as [Role, (typeof ROLES)[Role]][]).map(([id, r]) => (
                     <div key={id} className={cn("card-elevated p-4", id === user.role && "ring-2 ring-brand-green")}>
                       <div className="flex items-center justify-between gap-2">
@@ -356,7 +356,7 @@ export default function DocumentationPage() {
               </Section>
 
               <Section id="interface" icon={MonitorSmartphone} eyebrow="Fondamentaux" title="Interface commune">
-                <div className="grid gap-4 lg:grid-cols-3">
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
                   {DOC_SHELL.map((f) => (
                     <div key={f.titre} className="card-elevated p-5">
                       <h3 className="mb-2.5 font-heading font-semibold">{f.titre}</h3>

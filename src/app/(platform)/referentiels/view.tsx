@@ -35,7 +35,7 @@ export default function ReferentielsPage() {
     <>
       <PageHeader eyebrow="Référentiels · F09" title="Référentiels réglementaires" description="Paramétrage du moteur de workflow par module et procédure, catégories, pièces, grilles, textes et matrice d’habilitations. Listes à valider en atelier métier (§14)." />
       <Tabs defaultValue="procedures">
-        <TabsList className="mb-4 h-auto flex-wrap justify-start rounded-xl p-1">
+        <TabsList className="mb-4 w-full justify-start overflow-x-auto rounded-xl p-1 scrollbar-none sm:w-fit sm:flex-wrap group-data-horizontal/tabs:h-auto [&>button]:h-8 [&>button]:flex-none">
           <TabsTrigger value="procedures">Modules & procédures</TabsTrigger>
           <TabsTrigger value="categories">Catégories</TabsTrigger>
           <TabsTrigger value="habilitations">Habilitations</TabsTrigger>
@@ -52,7 +52,7 @@ export default function ReferentielsPage() {
                 <span className="size-3 rounded" style={{ background: m.color }} />
                 <h2 className="font-heading text-lg font-semibold">{m.label}</h2>
               </div>
-              <div className="grid gap-4 xl:grid-cols-2">
+              <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
                 {proceduresOf(m.id).map((p) => (
                   <div key={p.id} className="card-elevated p-5">
                     <div className="flex items-start justify-between gap-3">
@@ -73,7 +73,7 @@ export default function ReferentielsPage() {
                         </span>
                       ))}
                     </div>
-                    <dl className="mt-4 grid gap-4 text-xs sm:grid-cols-2">
+                    <dl className="mt-4 grid grid-cols-1 gap-4 text-xs sm:grid-cols-2">
                       <div>
                         <dt className="mb-1 font-semibold text-muted-foreground uppercase">Pièces exigibles</dt>
                         <ul className="space-y-0.5">{requiredPieces(p.id, categoriesFor(p.id)[0].id).map((x) => <li key={x.id} className="flex gap-1.5"><Check className="mt-0.5 size-3 shrink-0 text-brand-green" />{x.label}</li>)}</ul>
@@ -121,7 +121,7 @@ export default function ReferentielsPage() {
           {(Object.keys(GROUP_LABEL) as CategoryGroup[]).map((g) => (
             <section key={g}>
               <h2 className="mb-3 font-heading font-semibold">{GROUP_LABEL[g]}</h2>
-              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
                 {CATEGORIES.filter((c) => c.group === g).map((c) => (
                   <div key={c.id} className="card-elevated p-4">
                     <div className="font-semibold">{c.label}</div>
@@ -169,7 +169,7 @@ export default function ReferentielsPage() {
           <p className="mt-3 text-xs text-muted-foreground">Principe du moindre privilège ; agents cloisonnés par province, la Direction générale traite les procédures nationales et supervise.</p>
         </TabsContent>
 
-        <TabsContent value="grille" className="grid gap-4 lg:grid-cols-2">
+        <TabsContent value="grille" className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           {Object.entries(GRILLES).map(([k, items]) => (
             <div key={k} className="card-elevated overflow-hidden">
               <div className="border-b px-5 py-3 font-heading font-semibold">{k === "pharma" ? "Établissements pharmaceutiques (annexe 04)" : "Établissements médicaux"}</div>
@@ -187,7 +187,7 @@ export default function ReferentielsPage() {
         </TabsContent>
 
         <TabsContent value="textes">
-          <div className="grid gap-3 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             {TEXTES.map((t) => (
               <div key={t.ref} className="card-elevated flex gap-4 p-5">
                 <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-navy/8 text-brand-navy dark:text-sky-300"><FileText className="size-5" /></span>
@@ -202,7 +202,7 @@ export default function ReferentielsPage() {
         </TabsContent>
 
         <TabsContent value="annexes">
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {ANNEXES.map((a) => (
               <div key={a.n} className="card-elevated relative overflow-hidden p-5">
                 <div className="absolute -top-3 -right-1 font-heading text-7xl font-black text-brand-green/8">{a.n}</div>
@@ -215,7 +215,7 @@ export default function ReferentielsPage() {
         </TabsContent>
 
         <TabsContent value="provinces">
-          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
             {PROVINCES.map((p) => {
               const n = dossiers.filter((d) => d.province === p).length
               return (

@@ -413,7 +413,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             ) : (
               <div className="space-y-4">
                 <Skeleton className="h-10 w-72" />
-                <div className="grid gap-4 md:grid-cols-4">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
                   {[0, 1, 2, 3].map((i) => (
                     <Skeleton key={i} className="h-32 rounded-2xl" />
                   ))}

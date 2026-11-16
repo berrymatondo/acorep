@@ -66,9 +66,9 @@ export default function DossierPage() {
         </div>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_360px]">
         <Tabs defaultValue="apercu" className="min-w-0">
-          <TabsList className="mb-2 h-auto w-full justify-start overflow-x-auto rounded-xl p-1 scrollbar-none">
+          <TabsList className="mb-2 w-full justify-start overflow-x-auto rounded-xl p-1 scrollbar-none group-data-horizontal/tabs:h-auto [&>button]:h-8 [&>button]:flex-none">
             <TabsTrigger value="apercu">Aperçu</TabsTrigger>
             <TabsTrigger value="pieces">Pièces <span className="ml-1 font-mono text-[10px] opacity-60">{d.pieces.length}</span></TabsTrigger>
             <TabsTrigger value="recevabilite">Recevabilité</TabsTrigger>

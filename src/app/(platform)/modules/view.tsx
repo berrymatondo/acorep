@@ -28,7 +28,7 @@ export default function ModulesPage() {
         title="Modules réglementaires"
         description="Un même moteur de workflow, des circuits adaptés à chaque procédure : dépôt, évaluation, inspection, décision, notification et registre."
       />
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         {MODULES.map((m, i) => {
           const Icon = ICONS[m.id]
           const dossiers = visible.filter((d) => procDef(d.type).module === m.id)

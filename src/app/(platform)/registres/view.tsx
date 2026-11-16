@@ -132,7 +132,7 @@ export default function RegistresPage() {
         title="Registres réglementaires"
         description="Titres délivrés par l’ACOREP : établissements autorisés, produits enregistrés, AMM, autres autorisations. Renouvellements, modifications et retraits y sont rattachés."
       />
-      <div className="mb-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+      <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
         {MODULES.map((m) => (
           <button
             key={m.id}

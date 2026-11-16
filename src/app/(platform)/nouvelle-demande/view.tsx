@@ -256,7 +256,7 @@ function Wizard() {
     <>
       <PageHeader eyebrow={draft ? `Brouillon ${draft.id}` : "Dépôt en ligne"} title="Nouvelle demande" description="Choisissez le module et la procédure : le formulaire, les pièces exigibles et le circuit d’instruction s’adaptent automatiquement." />
 
-      <div className="grid gap-6 xl:grid-cols-[1fr_300px]">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_300px]">
         <div className="min-w-0">
           <div className="mb-6 grid grid-cols-4 gap-2">
             {STEPS.map((s, i) => (
@@ -293,7 +293,7 @@ function Wizard() {
                     </div>
                     <div>
                       <Label className="mb-2 block text-xs">Procédure</Label>
-                      <div className="grid gap-3 md:grid-cols-2">
+                      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                         {proceduresOf(mod).map((p) => (
                           <button
                             key={p.id}
@@ -347,7 +347,7 @@ function Wizard() {
                     )}
                     <div>
                       <Label className="mb-2 block text-xs">Catégorie</Label>
-                      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
                         {cats.map((c) => (
                           <button
                             key={c.id}
@@ -369,7 +369,7 @@ function Wizard() {
                     {def.fields && (
                       <div>
                         <div className="mb-3 font-heading font-semibold">{def.categoryGroup === "produit" ? "Produit et objet de la demande" : "Informations spécifiques"}</div>
-                        <div className="grid gap-4 md:grid-cols-2">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                           {def.fields.map((fd) => (
                             <DynamicField key={fd.id} f={fd} value={f.details[fd.id] ?? ""} onChange={(v) => set("details", { ...f.details, [fd.id]: v })} error={touched && fieldErrors[fd.id]} />
                           ))}
@@ -378,7 +378,7 @@ function Wizard() {
                     )}
                     <div>
                       <div className="mb-3 flex items-center gap-2 font-heading font-semibold"><Building2 className="size-4 text-brand-green" /> {def.subject.bloc}</div>
-                      <div className="grid gap-4 md:grid-cols-2">
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div className="md:col-span-2"><TextField label={def.subject.nom} value={f.nom} onChange={(v) => set("nom", v)} error={touched && errors.nom} /></div>
                         <TextField label={def.subject.adresse} value={f.adresse} onChange={(v) => set("adresse", v)} placeholder="N°, avenue, quartier" error={touched && errors.adresse} />
                         <TextField label={def.subject.commune} value={f.commune} onChange={(v) => set("commune", v)} error={touched && errors.commune} />
@@ -407,7 +407,7 @@ function Wizard() {
                     </div>
                     <div>
                       <div className="mb-3 font-heading font-semibold">Demandeur</div>
-                      <div className="grid gap-4 md:grid-cols-3">
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                         <TextField label="Nom complet" value={f.promoteur} onChange={(v) => set("promoteur", v)} error={touched && errors.promoteur} />
                         <TextField label="Téléphone" value={f.telephone} onChange={(v) => set("telephone", v)} placeholder="+243 …" error={touched && errors.telephone} mono />
                         <TextField label="Courriel" value={f.email} onChange={(v) => set("email", v)} error={touched && errors.email} />
@@ -415,7 +415,7 @@ function Wizard() {
                     </div>
                     <div>
                       <div className="mb-3 font-heading font-semibold">{def.subject.responsable}</div>
-                      <div className="grid gap-4 md:grid-cols-2">
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <TextField label="Nom" value={f.pharmacien} onChange={(v) => set("pharmacien", v)} error={touched && errors.pharmacien} />
                         <TextField label={def.subject.numero} value={f.numeroOrdre} onChange={(v) => set("numeroOrdre", v)} placeholder="CNOP/…" error={touched && errors.numeroOrdre} mono />
                       </div>
@@ -450,7 +450,7 @@ function Wizard() {
 
                 {step === 3 && (
                   <div className="space-y-5">
-                    <div className="grid gap-4 rounded-2xl bg-muted/50 p-5 text-sm md:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-4 rounded-2xl bg-muted/50 p-5 text-sm md:grid-cols-2">
                       <div><div className="text-[11px] text-muted-foreground uppercase">Procédure</div><div className="font-semibold">{PROCEDURES[f.type].label}{f.parentId && ` (réf. ${f.parentId})`}</div></div>
                       <div><div className="text-[11px] text-muted-foreground uppercase">Traitement</div><div className="font-semibold">{def.niveau === "central" ? "Niveau central" : `Province de ${f.province}`}</div></div>
                       <div><div className="text-[11px] text-muted-foreground uppercase">Objet</div><div className="font-semibold">{f.details.nomCommercial ? `${f.details.nomCommercial} ${f.details.dosage ?? ""}` : f.details.produitSuspect ?? f.nom}</div><div className="text-xs text-muted-foreground">{f.nom} — {f.commune}</div></div>

@@ -58,9 +58,9 @@ function Report() {
   ]
 
   return (
-    <div className="min-h-screen bg-muted/60 py-10 print:bg-white print:py-0">
+    <div className="min-h-screen bg-muted/60 py-4 sm:py-10 print:bg-white print:py-0">
       <style>{`@page { size: A4; margin: 14mm 12mm 16mm; }`}</style>
-      <div className="no-print mx-auto mb-4 flex max-w-[210mm] items-center justify-between gap-2 px-4">
+      <div className="no-print sticky top-0 z-10 mx-auto mb-4 flex max-w-[210mm] items-center justify-between gap-2 bg-muted/80 px-4 py-2 backdrop-blur sm:static sm:bg-transparent sm:py-0">
         <Button asChild variant="outline" className="rounded-xl">
           <Link href="/rapports"><ArrowLeft /> Rapports</Link>
         </Button>
@@ -69,8 +69,8 @@ function Report() {
         </Button>
       </div>
 
-      <article className="relative mx-auto max-w-[210mm] bg-white p-[14mm] text-[12px] leading-relaxed text-slate-900 shadow-2xl print:max-w-none print:p-0 print:shadow-none">
-        <header className="flex items-start justify-between border-b-2 border-brand-navy pb-4">
+      <article className="relative mx-auto max-w-[210mm] bg-white p-4 text-[12px] sm:p-[14mm] leading-relaxed text-slate-900 shadow-2xl print:max-w-none print:p-0 print:shadow-none">
+        <header className="flex flex-col gap-3 border-b-2 sm:flex-row sm:items-start sm:justify-between print:flex-row print:items-start print:justify-between border-brand-navy pb-4">
           <div className="flex items-center gap-3">
             <LogoMark className="size-12" />
             <div>
@@ -79,7 +79,7 @@ function Report() {
               <div className="text-[9.5px] text-slate-500">{user.province ? `Direction provinciale — ${user.province}` : "Direction générale — Kinshasa"}</div>
             </div>
           </div>
-          <div className="text-right text-[10.5px] text-slate-500">
+          <div className="text-[10.5px] text-slate-500 sm:text-right print:text-right">
             <div className="font-mono font-semibold text-slate-800">{ref}</div>
             <div>Édité le {fmtDateTime(new Date(now))}</div>
             <div>par {user.nom} ({ROLES[user.role].short})</div>
@@ -107,7 +107,7 @@ function Report() {
           <Procedure rows={rows} p={p} now={now} />
         )}
 
-        <footer className="mt-10 flex items-center justify-between border-t border-slate-200 pt-3 text-[9.5px] text-slate-500">
+        <footer className="mt-10 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between print:flex-row print:justify-between border-t border-slate-200 pt-3 text-[9.5px] text-slate-500">
           <span>RIMS · ACOREP — Données de démonstration, fictives.</span>
           <span>Délais en jours ouvrables. Seul le délai de l’avis d’implantation provient de la POS AQ-POS-ENR-001-26.</span>
         </footer>
@@ -129,7 +129,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 function Kpis({ items }: { items: { label: string; value: React.ReactNode; tone?: string }[] }) {
   return (
-    <div className="mt-6 grid grid-cols-4 gap-2.5 break-inside-avoid">
+    <div className="mt-6 grid grid-cols-2 gap-2.5 break-inside-avoid sm:grid-cols-4 print:grid-cols-4">
       {items.map((k) => (
         <div key={k.label} className="rounded-lg border border-slate-200 p-3">
           <div className={cn("font-heading text-[22px] leading-none font-bold", k.tone ?? "text-brand-navy")}>{k.value}</div>
@@ -142,7 +142,8 @@ function Kpis({ items }: { items: { label: string; value: React.ReactNode; tone?
 
 function Table({ head, children, right = [] }: { head: string[]; children: React.ReactNode; right?: number[] }) {
   return (
-    <table className="w-full border-collapse text-[10.5px]">
+    <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0 print:mx-0 print:overflow-visible print:px-0">
+    <table className="w-full min-w-[150mm] border-collapse text-[10.5px] print:min-w-0">
       <thead>
         <tr className="bg-slate-100 text-left text-[9.5px] tracking-wide text-slate-600 uppercase">
           {head.map((h, i) => (
@@ -152,6 +153,7 @@ function Table({ head, children, right = [] }: { head: string[]; children: React
       </thead>
       <tbody className="[&_td]:border-b [&_td]:border-slate-200 [&_td]:px-2 [&_td]:py-1.5 [&_tr]:break-inside-avoid">{children}</tbody>
     </table>
+    </div>
   )
 }
 
@@ -210,7 +212,7 @@ function Activite({ rows, p }: { rows: Dossier[]; p: RapportParams }) {
           </tr>
         </Table>
       </Section>
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2 print:grid-cols-2">
         <Section title="Répartition par province">
           <div className="space-y-1.5">
             {byProv.map(([prov, n]) => (

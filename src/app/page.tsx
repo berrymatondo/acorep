@@ -64,7 +64,7 @@ export default function Home() {
           </div>
         </header>
 
-        <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-14 px-5 pt-10 pb-24 md:px-8 lg:grid-cols-[1.1fr_1fr] lg:pt-16 lg:pb-32">
+        <div className="relative z-10 mx-auto grid grid-cols-1 max-w-7xl items-center gap-14 px-5 pt-10 pb-24 md:px-8 lg:grid-cols-[1.1fr_1fr] lg:pt-16 lg:pb-32">
           <div>
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-white/80 backdrop-blur">
               <Sparkles className="size-3.5 text-brand-lime" />
@@ -151,7 +151,7 @@ export default function Home() {
               {MODULES.length} modules et {PROCEDURE_DEFS.length} procédures opérationnels sur le même moteur de workflow et les mêmes services transverses.
             </p>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {MODULES.map((m, i) => {
               const Icon = MODULE_ICONS[m.id]
               const procs = PROCEDURE_DEFS.filter((p) => p.module === m.id)
@@ -206,7 +206,7 @@ export default function Home() {
             <h2 className="text-3xl font-bold md:text-5xl">Conçu pour la confiance</h2>
             <p className="mt-4 text-white/60">Conformité, traçabilité et transparence au service de la sécurité des patients et de la qualité des soins.</p>
           </div>
-          <div className="grid gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 md:grid-cols-2 lg:grid-cols-3">
             {TRUST.map((t) => (
               <div key={t.title} className="bg-brand-deep p-7 transition-colors hover:bg-white/[0.04]">
                 <t.icon className="size-6 text-brand-lime" />

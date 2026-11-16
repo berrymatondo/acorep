@@ -18,7 +18,7 @@ export function ProcessFlow() {
   const [active, setActive] = useState(0)
   return (
     <div>
-      <div className="relative grid gap-4 md:grid-cols-6">
+      <div className="relative grid grid-cols-1 gap-4 md:grid-cols-6">
         <svg className="pointer-events-none absolute top-9 right-[8%] left-[8%] hidden h-2 md:block" preserveAspectRatio="none" viewBox="0 0 100 2">
           <line x1="0" y1="1" x2="100" y2="1" stroke="currentColor" className="text-border" strokeWidth="2" vectorEffect="non-scaling-stroke" />
           <line x1="0" y1="1" x2="100" y2="1" stroke="var(--brand-green)" strokeWidth="2" strokeDasharray="6 14" vectorEffect="non-scaling-stroke" className="animate-flow" />

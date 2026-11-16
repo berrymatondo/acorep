@@ -12,7 +12,7 @@ export function PersonaGrid() {
   const setUser = useRims((s) => s.setUser)
   const people = USERS.filter((u) => !["u-ins2", "u-dir-hk", "u-exp2"].includes(u.id))
   return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {people.map((u, i) => (
         <motion.button
           key={u.id}

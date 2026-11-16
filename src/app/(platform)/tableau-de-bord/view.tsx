@@ -115,14 +115,14 @@ function AgentDashboard() {
         }
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Kpi icon={FileText} label="Dossiers en cours" value={enCours.length} hint={`${dossiers.length} au total dans votre périmètre`} accent="bg-brand-navy" href="/dossiers" />
         <Kpi icon={CirclePause} label="À compléter" value={complements.length} hint="Délai suspendu, attente du demandeur" accent="bg-amber-500" href="/dossiers?statut=complements" />
         <Kpi icon={Radar} label="Inspections programmées" value={inspections.length} hint={`${dossiers.filter((d) => d.status === "inspection" && !d.mission).length} mission(s) à planifier`} accent="bg-cyan-600" href="/inspections" />
         <Kpi icon={TriangleAlert} label="Échéances proches" value={echeances.length} hint="≥ 60 % du délai de 60 j.o. consommé" accent="bg-rose-500" href="/dossiers?tri=delai" />
       </div>
 
-      <div className="mt-6 grid gap-4 xl:grid-cols-3">
+      <div className="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-3">
         <section className="card-elevated p-5 xl:col-span-2">
           <div className="mb-1 flex items-center justify-between">
             <h2 className="font-heading text-base font-semibold">Flux réglementaire</h2>
@@ -159,7 +159,7 @@ function AgentDashboard() {
         </section>
       </div>
 
-      <div className="mt-4 grid gap-4 xl:grid-cols-3">
+      <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-3">
         <section className="card-elevated p-5">
           <h2 className="font-heading text-base font-semibold">Dossiers par étape</h2>
           <p className="mb-4 text-xs text-muted-foreground">Cliquez une étape pour filtrer</p>
@@ -213,7 +213,7 @@ function AgentDashboard() {
             </Button>
           )}
         </div>
-        <div className="grid gap-x-8 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-x-8 md:grid-cols-2">
           {myEvents
             .slice(-10)
             .reverse()
@@ -324,7 +324,7 @@ function ApplicantDashboard() {
         </div>
       ))}
       <PageHeader eyebrow="Portail demandeur" title="Mes dossiers" description={`${dossiers.length} dossier(s) — ${[...new Set(dossiers.map((d) => PROCEDURES[d.type].label))].join(", ")}.`} />
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {dossiers.map((d, i) => (
           <motion.div key={d.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
             <ApplicantCard d={d} />
