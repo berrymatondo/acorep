@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useEffect, useMemo, useState } from "react"
 import {
-  ArrowRight, ArrowUpRight, BookOpen, BookOpenCheck, Boxes, Check, CircleHelp, FileText, FolderOpen, History, Home,
+  ArrowRight, ArrowUpRight, BookOpen, Download, BookOpenCheck, Boxes, Check, CircleHelp, FileText, FolderOpen, History, Home,
   Inbox, LayoutDashboard, Library, Lightbulb, Map, MonitorSmartphone, Plus, Printer, QrCode, Radar, Search, Users, Workflow, X,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -192,6 +192,13 @@ export default function DocumentationPage() {
         eyebrow="Aide · Guide d’utilisation"
         title="Documentation"
         description={`Chaque écran du RIMS, ses fonctionnalités et qui peut l’utiliser. ${DOC_PAGES.length} pages décrites, ${PROCEDURE_DEFS.length} procédures, ${Object.keys(ROLES).length} rôles.`}
+        actions={
+          <Button asChild className="rounded-xl bg-brand-navy text-white hover:bg-brand-navy/90">
+            <a href="/docs/guide-plateforme-acorep.pdf" download="Guide de la plateforme ACOREP.pdf">
+              <Download /> Guide de la plateforme (PDF)
+            </a>
+          </Button>
+        }
       />
 
       <div className="grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[240px_minmax(0,1fr)]">

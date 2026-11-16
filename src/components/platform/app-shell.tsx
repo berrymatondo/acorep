@@ -7,15 +7,16 @@ import { useTheme } from "next-themes"
 import { motion } from "motion/react"
 import {
   BookOpenCheck, Bell, FolderOpen, History, Inbox, LayoutDashboard, LogOut, Menu,
-  Moon, Plus, QrCode, Radar, RotateCcw, Search, Sun, ChevronsUpDown, MapPin, Check, Boxes, Library, BookOpen, Workflow,
+  Moon, Plus, QrCode, Radar, RotateCcw, Search, Sun, ChevronsUpDown, MapPin, Check, Boxes, Library, BookOpen, Workflow, PanelLeftClose, PanelLeftOpen, FileBarChart,
 } from "lucide-react"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 import { useCurrentUser, useHydrated, useRims } from "@/lib/store"
 import { ROLES, USERS } from "@/lib/referentiels"
 import { canSee, needsMyAction } from "@/lib/workflow"
 import type { Role } from "@/lib/types"
 import { fromNow } from "@/lib/dates"
-import { Logo } from "@/components/brand/logo"
+import { Logo, LogoMark } from "@/components/brand/logo"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
@@ -37,6 +38,7 @@ const NAV: { group: string; items: NavItem[] }[] = [
       { href: "/travail", label: "File de travail", icon: Inbox, badge: "queue", roles: ["secretariat", "bureau", "expert", "inspecteur", "finance", "cpop", "commission", "directeur", "dg"] },
       { href: "/modules", label: "Modules", icon: Boxes },
       { href: "/processus", label: "Processus", icon: Workflow },
+      { href: "/rapports", label: "Rapports", icon: FileBarChart, roles: ["secretariat", "bureau", "expert", "inspecteur", "finance", "cpop", "commission", "directeur", "dg"] },
       { href: "/dossiers", label: "Dossiers", icon: FolderOpen },
       { href: "/nouvelle-demande", label: "Nouvelle demande", icon: Plus, roles: ["demandeur"] },
     ],
@@ -60,7 +62,7 @@ const NAV: { group: string; items: NavItem[] }[] = [
   },
 ]
 
-function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
+function Sidebar({ onNavigate, collapsed = false, onToggle }: { onNavigate?: () => void; collapsed?: boolean; onToggle?: () => void }) {
   const pathname = usePathname()
   const user = useCurrentUser()
   const dossiers = useRims((s) => s.dossiers)
@@ -70,28 +72,34 @@ function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
     <div className="relative flex h-full flex-col overflow-hidden bg-sidebar text-sidebar-foreground">
       <div className="pointer-events-none absolute inset-0 bg-grid-light opacity-40 mask-fade-b" />
       <div className="pointer-events-none absolute -top-24 -left-24 size-72 rounded-full bg-brand-green/20 blur-3xl" />
-      <div className="relative px-5 pt-5 pb-6">
-        <Link href="/" onClick={onNavigate}>
-          <Logo tone="light" />
+      <div className={cn("relative pt-5 pb-6", collapsed ? "flex justify-center px-2" : "px-5")}>
+        <Link href="/" onClick={onNavigate} aria-label="Accueil ACOREP">
+          {collapsed ? <LogoMark tile /> : <Logo tone="light" />}
         </Link>
       </div>
-      <nav className="relative flex-1 space-y-6 overflow-y-auto px-3 scrollbar-none">
+      <nav className={cn("relative flex-1 space-y-6 overflow-y-auto scrollbar-none", collapsed ? "px-2" : "px-3")}>
         {NAV.map((g) => {
           const items = g.items.filter((i) => !i.roles || i.roles.includes(user.role))
           if (!items.length) return null
           return (
             <div key={g.group}>
-              <div className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35">{g.group}</div>
+              {collapsed ? (
+                <div className="mx-auto mb-2 h-px w-6 bg-white/15" aria-hidden />
+              ) : (
+                <div className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35">{g.group}</div>
+              )}
               <div className="space-y-0.5">
                 {items.map((item) => {
                   const active = pathname === item.href || pathname.startsWith(item.href + "/")
-                  return (
+                  const link = (
                     <Link
                       key={item.href}
                       href={item.href}
                       onClick={onNavigate}
+                      aria-label={collapsed ? item.label : undefined}
                       className={cn(
-                        "group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors",
+                        "group relative flex items-center rounded-xl py-2 text-sm font-medium transition-colors",
+                        collapsed ? "justify-center px-0" : "gap-3 px-3",
                         active ? "text-white" : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-white"
                       )}
                     >
@@ -103,14 +111,29 @@ function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
                         />
                       )}
                       {active && <span className="absolute top-2 bottom-2 left-0 w-[3px] rounded-r bg-brand-green" />}
-                      <item.icon className={cn("relative size-4", active ? "text-brand-lime" : "opacity-70")} />
-                      <span className="relative">{item.label}</span>
-                      {item.badge === "queue" && queue > 0 && (
-                        <span className="relative ml-auto rounded-full bg-brand-green px-1.5 py-px font-mono text-[10px] font-bold text-white">
-                          {queue}
-                        </span>
-                      )}
+                      <item.icon className={cn("relative", collapsed ? "size-4.5" : "size-4", active ? "text-brand-lime" : "opacity-70")} />
+                      {!collapsed && <span className="relative">{item.label}</span>}
+                      {item.badge === "queue" && queue > 0 &&
+                        (collapsed ? (
+                          <span className="absolute top-0.5 right-1.5 grid min-w-4 place-items-center rounded-full bg-brand-green px-1 font-mono text-[9px] font-bold text-white">
+                            {queue}
+                          </span>
+                        ) : (
+                          <span className="relative ml-auto rounded-full bg-brand-green px-1.5 py-px font-mono text-[10px] font-bold text-white">
+                            {queue}
+                          </span>
+                        ))}
                     </Link>
+                  )
+                  if (!collapsed) return link
+                  return (
+                    <Tooltip key={item.href}>
+                      <TooltipTrigger asChild>{link}</TooltipTrigger>
+                      <TooltipContent side="right">
+                        {item.label}
+                        {item.badge === "queue" && queue > 0 ? ` · ${queue}` : ""}
+                      </TooltipContent>
+                    </Tooltip>
                   )
                 })}
               </div>
@@ -118,16 +141,55 @@ function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
           )
         })}
       </nav>
-      <div className="relative m-3 rounded-2xl border border-white/8 bg-white/4 p-3">
-        <div className="flex items-center gap-2 text-[11px] text-white/60">
-          <span className="relative flex size-2">
-            <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand-green opacity-60" />
-            <span className="relative inline-flex size-2 rounded-full bg-brand-green" />
-          </span>
-          Environnement de démonstration
+      {collapsed ? (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className="relative mx-auto my-3 flex size-2" aria-label="Environnement de démonstration">
+              <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand-green opacity-60" />
+              <span className="relative inline-flex size-2 rounded-full bg-brand-green" />
+            </span>
+          </TooltipTrigger>
+          <TooltipContent side="right">Environnement de démonstration · données fictives</TooltipContent>
+        </Tooltip>
+      ) : (
+        <div className="relative m-3 rounded-2xl border border-white/8 bg-white/4 p-3">
+          <div className="flex items-center gap-2 text-[11px] text-white/60">
+            <span className="relative flex size-2">
+              <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand-green opacity-60" />
+              <span className="relative inline-flex size-2 rounded-full bg-brand-green" />
+            </span>
+            Environnement de démonstration
+          </div>
+          <p className="mt-1 text-[11px] leading-snug text-white/40">Données fictives, stockées localement dans le navigateur.</p>
         </div>
-        <p className="mt-1 text-[11px] leading-snug text-white/40">Données fictives, stockées localement dans le navigateur.</p>
-      </div>
+      )}
+      {onToggle && (
+        <div className={cn("relative border-t border-white/8 p-2", collapsed && "flex justify-center")}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                onClick={onToggle}
+                aria-label={collapsed ? "Déplier le menu" : "Réduire le menu"}
+                aria-expanded={!collapsed}
+                className={cn(
+                  "flex items-center gap-3 rounded-xl py-2 text-sm font-medium text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent hover:text-white",
+                  collapsed ? "justify-center px-2.5" : "w-full px-3"
+                )}
+              >
+                {collapsed ? <PanelLeftOpen className="size-4.5" /> : <PanelLeftClose className="size-4" />}
+                {!collapsed && (
+                  <>
+                    Réduire le menu
+                    <kbd className="ml-auto rounded border border-white/15 px-1.5 font-mono text-[10px] text-white/50">Ctrl B</kbd>
+                  </>
+                )}
+              </button>
+            </TooltipTrigger>
+            {collapsed && <TooltipContent side="right">Déplier le menu · Ctrl B</TooltipContent>}
+          </Tooltip>
+        </div>
+      )}
     </div>
   )
 }
@@ -265,6 +327,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const setUser = useRims((s) => s.setUser)
   const user = useCurrentUser()
   const asParam = useSearchParams().get("as")
+  const collapsedPref = useRims((s) => s.sidebarCollapsed)
+  const toggleSidebar = useRims((s) => s.toggleSidebar)
+  // Avant restauration de l’état local, on garde la largeur par défaut (pas d’écart d’hydratation).
+  const collapsed = hydrated && collapsedPref
 
   // Lien de démonstration : ?as=<identifiant de profil> ouvre l’écran avec ce profil.
   useEffect(() => {
@@ -277,15 +343,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         e.preventDefault()
         setCmd((v) => !v)
       }
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "b") {
+        e.preventDefault()
+        toggleSidebar()
+      }
     }
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
-  }, [])
+  }, [toggleSidebar])
 
   return (
     <div className="flex min-h-screen">
-      <aside className="no-print fixed inset-y-0 left-0 z-30 hidden w-64 lg:block">{hydrated && <Sidebar />}</aside>
-      <div className="flex min-w-0 flex-1 flex-col lg:pl-64">
+      <aside className={cn("no-print fixed inset-y-0 left-0 z-30 hidden transition-[width] duration-300 ease-out lg:block", collapsed ? "w-18" : "w-64")}>
+        {hydrated && <Sidebar collapsed={collapsed} onToggle={toggleSidebar} />}
+      </aside>
+      <div className={cn("flex min-w-0 flex-1 flex-col transition-[padding] duration-300 ease-out", collapsed ? "lg:pl-18" : "lg:pl-64")}>
         <header className="no-print sticky top-0 z-20 flex h-16 items-center gap-3 border-b bg-background/75 px-4 backdrop-blur-xl md:px-6">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>

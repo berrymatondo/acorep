@@ -25,6 +25,9 @@ interface State {
   counter: number
   userId: string
   setUser: (id: string) => void
+  /** Préférence d’affichage : menu latéral réduit aux icônes. */
+  sidebarCollapsed: boolean
+  toggleSidebar: () => void
   /** Applique une action métier : modifie le dossier et l’inscrit au journal chaîné. */
   act: (
     dossierId: string,
@@ -49,6 +52,8 @@ export const useRims = create<State>()(
       ...seed(),
       userId: "u-bur",
       setUser: (id) => set({ userId: id }),
+      sidebarCollapsed: false,
+      toggleSidebar: () => set({ sidebarCollapsed: !get().sidebarCollapsed }),
       act: (dossierId, action, patch, opts) => {
         const { dossiers, events, userId, notifs } = get()
         const user = USERS.find((u) => u.id === userId)!
