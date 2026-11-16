@@ -7,7 +7,7 @@ import { useTheme } from "next-themes"
 import { motion } from "motion/react"
 import {
   BookOpenCheck, Bell, FolderOpen, History, Inbox, LayoutDashboard, LogOut, Menu,
-  Moon, Plus, QrCode, Radar, RotateCcw, Search, Sun, ChevronsUpDown, MapPin, Check, Boxes, Library, BookOpen,
+  Moon, Plus, QrCode, Radar, RotateCcw, Search, Sun, ChevronsUpDown, MapPin, Check, Boxes, Library, BookOpen, Workflow,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useCurrentUser, useHydrated, useRims } from "@/lib/store"
@@ -36,6 +36,7 @@ const NAV: { group: string; items: NavItem[] }[] = [
       { href: "/tableau-de-bord", label: "Tableau de bord", icon: LayoutDashboard },
       { href: "/travail", label: "File de travail", icon: Inbox, badge: "queue", roles: ["secretariat", "bureau", "expert", "inspecteur", "finance", "cpop", "commission", "directeur", "dg"] },
       { href: "/modules", label: "Modules", icon: Boxes },
+      { href: "/processus", label: "Processus", icon: Workflow },
       { href: "/dossiers", label: "Dossiers", icon: FolderOpen },
       { href: "/nouvelle-demande", label: "Nouvelle demande", icon: Plus, roles: ["demandeur"] },
     ],
